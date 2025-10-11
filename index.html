@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>me</title>
+	<link href="/css/output.css" rel="stylesheet">
+	<style>
+		.animate-blink {
+			animation: blink 0.8s step-end infinite;
+		}
+
+		@keyframes blink {
+
+			0%,
+			50% {
+				opacity: 1;
+			}
+
+			50.01%,
+			100% {
+				opacity: 0;
+			}
+		}
+
+		#particleCanvas {
+			display: block;
+			/* 消除canvas下方的默认间隙 */
+			z-index: 1;
+			/* 或 -1，使其成为背景 */
+			pointer-events: none;
+			/* 允许点击穿透 */
+		}
+
+		.bg {
+			background: linear-gradient(to bottom,
+					#197ec7 0%,
+					#b1c5be 40vh,
+					#cacbcc 50vh,
+					#ffffff 100%)
+		}
+
+		;
+	</style>
+</head>
+
+<body class="min-h-screen bg relative">
+	<canvas id="particleCanvas" class="fixed top-0 left-0 bg-transparent"></canvas>
+
+	<div class="top-0 left-0 flex flex-col">
+		<div class="w-full h-fit p-4">
+			<div class="w-full h-full flex flex-col items-center">
+				<h1 class="font-bold text-5xl text-orange-300 text-center w-fit bg-cyan-600 mt-8 px-4 py-3 rounded-2xl">
+					<span id="animated-title"></span>
+					<span id="ellipsis" class="animate-blink hidden">_</span>
+				</h1>
+				<div class="mt-4  max-w-[50vw] flex flex-wrap justify-center">
+					<label class="mt-2 mx-1 font-bold  bg-cyan-600 text-white px-2 py-1 rounded-[8px]">xxxx</label>
+					<label class="mt-2 mx-1 font-bold  bg-cyan-800 text-white px-2 py-1 rounded-[8px]">xxxx</label>
+					<label class="mt-2 mx-1 font-bold  bg-amber-600 text-white px-2 py-1 rounded-[8px]">xxxx</label>
+					<label class="mt-2 mx-1 font-bold  bg-green-700 text-white px-2 py-1 rounded-[8px]">xxxx</label>
+					<label class="mt-2 mx-1 font-bold  bg-blue-800 text-white px-2 py-1 rounded-[8px]">xxxx</label>
+					<label class="mt-2 mx-1 font-bold  bg-fuchsia-700 text-white px-2 py-1 rounded-[8px]">xxxx</label>
+					<label class="mt-2 mx-1 font-bold  bg-red-900 text-white px-2 py-1 rounded-[8px]">xxxx</label>
+					<label class="mt-2 mx-1 font-bold  bg-emerald-400 text-white px-2 py-1 rounded-[8px]">xxxx</label>
+				</div>
+				<div class="font-light text-white text-pretty mt-8">
+					<i class="far fa-calendar-alt mr-2"></i>2025.10.07
+				</div>
+			</div>
+
+		</div>
+		<div class="w-full mt-4">
+			
+			<div class="flex flex-col flex-wrap justify-center items-center">
+				<p class="mt-4 text-2xl text-blue-950 font-medium">白日依山尽</p>
+				<p class="mt-4 text-2xl text-blue-950 font-medium">黄河入海流</p>
+				<p class="mt-4 text-2xl text-blue-950 font-medium">欲穷千里目</p>
+				<p class="mt-4 text-2xl text-blue-950 font-medium">更上一层楼</p>
+
+			</div>
+		</div>
+	</div>
+
+	<script type="module" src="/js/main.js"></script>
+
+</body>
+
+</html>
