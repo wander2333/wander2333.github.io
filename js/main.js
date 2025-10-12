@@ -51,16 +51,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // setInterval(createParticle, 100);
     // 1. 获取Canvas元素和绘图上下文
     const canvas = document.getElementById('particleCanvas');
+    const bg_canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
+    
+
+    
   
     // 2. 设置画布尺寸为整个窗口
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      bg_canvas.width = window.innerWidth;
+      bg_canvas.height = window.innerHeight;
     }
     resizeCanvas(); // 初始化尺寸
     // 监听窗口大小变化，实时调整画布尺寸
     window.addEventListener('resize', resizeCanvas);
+    // 初始化云朵管理器
+    const cloudManager = new CloudManager(canvas, canvas.width/200);
+    // 初始化太阳 [新增]
+    const sun = new Sun(canvas);
   
     // 3. 定义粒子类
     class Particle {
@@ -162,12 +172,79 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.restore();
       }
     }
+
+    // 背景图片类
+    class Background {
+      constructor(canvas, imagePath) {
+        this.canvas = bg_canvas;
+        this.ctx = bg_canvas.getContext('2d');
+        this.image = new Image();
+        this.image.src = imagePath;
+        this.loaded = false;
+        
+        this.image.onload = () => {
+          this.loaded = true;
+          this.draw();
+        };
+      }
+
+  draw() {
+    if (!this.loaded) return;
+    
+    const ctx = this.ctx;
+    const canvas = this.canvas;
+    
+    // 计算绘制区域 (从30vh到底部)
+    const startY = canvas.height * 0.3;
+    const drawHeight = canvas.height - startY;
+    
+    // 清除之前的绘制
+    ctx.clearRect(0, startY, canvas.width, drawHeight);
+    
+    // 计算图片缩放比例
+    const widthRatio = canvas.width / this.image.width;
+    const heightRatio = drawHeight / this.image.height;
+    
+    // 图片偏小：等比例拉伸
+    if (widthRatio > 1 || heightRatio > 1) {
+      const scale = Math.max(widthRatio, heightRatio);
+      const scaledWidth = this.image.width * scale;
+      const scaledHeight = this.image.height * scale;
+      
+      ctx.drawImage(
+        this.image,
+        0, 0, this.image.width, this.image.height,
+        0, startY, scaledWidth, scaledHeight
+      );
+    } 
+    // 图片偏大：从左上角开始绘制
+    else {
+      ctx.drawImage(
+        this.image,
+        0, 0, // 源图片左上角坐标
+        Math.min(this.image.width, canvas.width), // 源宽度
+        Math.min(this.image.height, drawHeight), // 源高度
+        0, startY, // 目标左上角坐标
+        Math.min(this.image.width, canvas.width), // 目标宽度
+        Math.min(this.image.height, drawHeight) // 目标高度
+      );
+    }
+  }
+    }
+
+    // 初始化背景
+    const background = new Background(canvas, '/assets/bjs.webp');
+
+    // 窗口大小变化时重绘
+    window.addEventListener('resize', () => {
+      background.draw();
+    });
   
     // 2. 加载蒲公英图片
     const dandelionImg1 = new Image();
-    dandelionImg1.src = '/assets/1-removebg-preview.png';//'/examples/me/one.svg'; // 请替换为你的蒲公英图片实际地址
+    dandelionImg1.src = '/assets/p1.webp';//'/examples/me/one.svg'; // 请替换为你的蒲公英图片实际地址
     const dandelionImg2 = new Image();
-    dandelionImg2.src = '/assets/2-removebg-preview.png';
+    dandelionImg2.src = '/assets/p2.webp';
     // 4. 创建粒子数组并初始化
     const particlesArray = [];
     const numberOfParticles = 16; // 粒子数量，可根据性能调整
@@ -207,12 +284,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // 5. 动画循环函数
     function animate() {
-      // ctx.fillRect(0, 0, canvas.width, canvas.height);
-      //   ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      //   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
+      
+      
+      // 更新和绘制云朵
+      cloudManager.update();
+      cloudManager.draw();
+      
+      // 更新和绘制太阳 [新增]
+      sun.update();
+      sun.draw();
+      
       // 遍历所有粒子，更新位置并绘制
       for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].update();
@@ -223,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dandelions[i].update();
         dandelions[i].draw();
       }
-  
       // 递归调用animate，形成动画循环
       requestAnimationFrame(animate);
     }
@@ -231,4 +312,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. 启动动画
     animate();
   });
-  

@@ -30,6 +30,14 @@
 			pointer-events: none;
 			/* 允许点击穿透 */
 		}
+		#bgCanvas {
+			display: block;
+			/* 消除canvas下方的默认间隙 */
+			z-index: -1;
+			/* 或 -1，使其成为背景 */
+			pointer-events: none;
+			/* 允许点击穿透 */
+		}
 
 		.bg {
 			background: linear-gradient(to bottom,
@@ -44,6 +52,7 @@
 </head>
 
 <body class="min-h-screen bg relative">
+	<canvas id="bgCanvas" class="fixed top-0 left-0 bg-transparent"></canvas>
 	<canvas id="particleCanvas" class="fixed top-0 left-0 bg-transparent"></canvas>
 
 	<div class="top-0 left-0 flex flex-col">
@@ -81,7 +90,11 @@
 		</div>
 	</div>
 
-	<script type="module" src="/js/main.js"></script>
+	<!-- 引入粒子效果脚本 -->
+	<script src="js/main.js"></script>
+	
+	<!-- 引入云朵效果脚本 -->
+	<script src="js/yun.js"></script>
 
 </body>
 
