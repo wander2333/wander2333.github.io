@@ -140,10 +140,4 @@ class CloudManager {
     this.clouds.forEach(cloud => cloud.draw());
   }
 }
-
-// 导出云朵管理器
 window.CloudManager = CloudManager;
-
-
-// 执行测试
-// testFlip(); // 取消注释以运行测试
