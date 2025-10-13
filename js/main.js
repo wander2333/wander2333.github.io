@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const title = document.getElementById('animated-title');
   const ellipsis = document.getElementById('ellipsis');
-  const text = 'xxxxx';
+  const text = '武汉BFB';
   let index = 0;
 
   // 逐字显示函数
@@ -118,10 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
       this.x += this.speedX;
       this.y += this.speedY;
       this.angle += this.spinSpeed;
+      this.size *= 0.999;
 
       // 如果蒲公英飘出屏幕，重置它到顶部
       // if (this.y > canvas.height || this.x < -50 || this.x > canvas.width + 50) {
       if (this.y < 0 || this.x < -50 || this.x > canvas.width + 50) {
+        this.reset();
+      }
+      if (this.size < 10) {
         this.reset();
       }
     }
@@ -196,15 +200,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. 动画循环函数
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-
-    // 更新和绘制云朵
-    cloudManager.update();
-    cloudManager.draw();
-
-    // 更新和绘制太阳 [新增]
     sun.update();
     sun.draw();
+
+    cloudManager.update();
+    cloudManager.draw();
 
     // 遍历所有粒子，更新位置并绘制
     for (let i = 0; i < particlesArray.length; i++) {

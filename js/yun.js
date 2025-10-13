@@ -31,7 +31,7 @@ class Cloud {
     this.speed = 4-this.scale*10/3;//1 + Math.random() * 3;
 
     // 随机透明度 (0.4-0.9)
-    this.alpha =  this.scale/2;//0.4 + Math.random() * 0.5;
+    this.alpha =  this.scale*0.8;//0.4 + Math.random() * 0.5;
     this.counter=0;
   }
 
